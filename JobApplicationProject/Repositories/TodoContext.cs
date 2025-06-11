@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using JobApplicationProject.Models;
 
-namespace JobApplicationProject.Models
+namespace JobApplicationProject.Repositories
 {
     public class TodoContext : DbContext
     {
@@ -10,5 +11,6 @@ namespace JobApplicationProject.Models
         }
 
         public DbSet<TaskItem> TaskItems { get; set; } = null!;
+        public DbSet<Project> Projects { get; set; } = null!;
     }
 } 
