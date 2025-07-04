@@ -1,0 +1,45 @@
+@page "/projects"
+@using JobApplicationProject.Contracts
+@using JobApplicationProject.Models
+
+@inject IProjectService ProjectService
+
+<h3>Projeler</h3>
+
+@if (projects == null)
+{
+    <p>Yükleniyor...</p>
+}
+else if (!projects.Any())
+{
+    <p>Hiç proje yok.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Adı</th>
+                <th>Açıklama</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Project>? projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await ProjectService.GetAllProjectsAsync();
+    }
+}

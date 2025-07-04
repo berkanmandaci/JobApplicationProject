@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JobApplicationProject.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20250611004810_AddProjectEntities")]
-    partial class AddProjectEntities
+    [Migration("20250704210850_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

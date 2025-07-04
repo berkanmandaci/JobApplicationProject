@@ -5,26 +5,27 @@ services:
     image: postgres:16-alpine
     restart: always
     environment:
-      POSTGRES_DB: JobApplicationDb
-      POSTGRES_USER: ${ADMIN_USERNAME}
-      POSTGRES_PASSWORD: ${ADMIN_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  api:
+  ui:
     build:
-      context: ./JobApplicationProject
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: UI/Dockerfile
     restart: always
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
-      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=JobApplicationDb;Username=${ADMIN_USERNAME};Password=${ADMIN_PASSWORD}
       ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    # Connection string burada environment variable ile override edilir, appsettings.json'daki değer development için örnek olarak kalır.
 
 volumes:
   pgdata: 
