@@ -39,10 +39,9 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izl
 
 1.  **Depoyu Klonlayın:**
     ```bash
-    git clone https://github.com/KULLANICI_ADINIZ/JobApplicationProject.git
+    git clone https://github.com/berkanmandaci/JobApplicationProject.git
     cd JobApplicationProject
     ```
-    *Not: `KULLANICI_ADINIZ` kısmını kendi GitHub kullanıcı adınızla değiştirin.*
 
 2.  **Veritabanı Kimlik Bilgilerini Ayarlayın:**
     `docker-compose.yml` dosyası, PostgreSQL veritabanı için ortam değişkenlerini kullanır. Bu değişkenleri Docker Compose çalıştırmadan önce terminalinizde ayarlamanız gerekmektedir.
@@ -55,7 +54,6 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izl
     *Lütfen `sizin_kullanıcı_adınız` ve `sizin_şifreniz` kısımlarını kendi belirlediğiniz güvenli kimlik bilgileriyle değiştirin.*
 
 3.  **Uygulamayı Başlatın:**
-    Proje kök dizininde (`C:\Projects\Backend\RoadMap\JobApplicationProject`)
 
     ```bash
     docker compose up --build
@@ -110,15 +108,4 @@ Veritabanı ilişkileri nedeniyle, bir görevi oluşturmadan önce o görevin at
     *   `Execute` düğmesine tıklayın.
     *   Dönen JSON yanıtında, oluşturduğunuz projenin `taskItems` dizisinin artık boş olmadığını ve içine eklediğiniz görevleri içerdiğini görmelisiniz.
 
-## Gelecek Geliştirmeler (İsteğe Bağlı)
 
-Bu proje, çeşitli iyileştirmeler ve ek özellikler için temel oluşturmaktadır. Potansiyel gelecek geliştirme alanları şunları içerebilir:
-
--   **Kimlik Doğrulama ve Yetkilendirme:** Kullanıcı yönetimi ve API erişimi için güvenlik katmanları ekleme.
--   **Daha İleri İş Mantığı:** Görev öncelikleri, son tarihler, kullanıcı atamaları gibi daha karmaşık iş kuralları uygulama.
--   **Bulut Dağıtımı:** Dockerize edilmiş yapısı sayesinde AWS EC2, AWS ECS (Elastic Container Service) veya Kubernetes gibi bulut platformlarına kolayca dağıtılabilir.
--   **Testler:** Birim testleri, entegrasyon testleri ve uçtan uca testler yazma.
-
-## İletişim
-
-Sorularınız veya geri bildirimleriniz için [e-posta adresiniz] üzerinden benimle iletişime geçebilirsiniz. 
