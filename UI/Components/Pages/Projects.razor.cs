@@ -24,18 +24,18 @@ namespace UI.Components.Pages
 
         protected async Task LoadProjects()
         {
-            projects = (await ProjectService.GetAllProjectsAsync()).ToList();
+            projects = (await ProjectService.GetAllAsync()).ToList();
         }
 
         protected async Task HandleValidSubmit()
         {
             if (editProject.Id == 0)
             {
-                await ProjectService.CreateProjectAsync(editProject);
+                await ProjectService.CreateAsync(editProject);
             }
             else
             {
-                await ProjectService.UpdateProjectAsync(editProject.Id, editProject);
+                await ProjectService.UpdateAsync(editProject.Id, editProject);
             }
             editProject = new();
             await LoadProjects();
@@ -59,7 +59,7 @@ namespace UI.Components.Pages
 
         protected async Task DeleteProject(long id)
         {
-            await ProjectService.DeleteProjectAsync(id);
+            await ProjectService.DeleteAsync(id);
             await LoadProjects();
         }
 
@@ -67,21 +67,21 @@ namespace UI.Components.Pages
         {
             newTask.ProjectId = projectId;
             newTask.IsComplete = false; // Görev eklerken her zaman tamamlanmadı olarak başlasın
-            await TaskItemService.CreateTaskItemAsync(newTask);
+            await TaskItemService.CreateAsync(newTask);
             newTask = new();
             await LoadProjects();
         }
 
         protected async Task DeleteTask(long taskId, long projectId)
         {
-            await TaskItemService.DeleteTaskItemAsync(taskId);
+            await TaskItemService.DeleteAsync(taskId);
             await LoadProjects();
         }
 
         protected async Task ToggleTaskComplete(TaskItem task, bool value)
         {
             task.IsComplete = value;
-            await TaskItemService.UpdateTaskItemAsync(task.Id, task);
+            await TaskItemService.UpdateAsync(task.Id, task);
             await LoadProjects();
         }
     }

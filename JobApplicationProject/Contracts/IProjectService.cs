@@ -2,12 +2,8 @@ using JobApplicationProject.Models;
 
 namespace JobApplicationProject.Contracts
 {
-    public interface IProjectService
+    public interface IProjectService : IGenericService<Project>
     {
-        Task<IEnumerable<Project>> GetAllProjectsAsync();
-        Task<Project?> GetProjectByIdAsync(long id);
-        Task<Project> CreateProjectAsync(Project project);
-        Task<bool> UpdateProjectAsync(long id, Project project);
-        Task<bool> DeleteProjectAsync(long id);
+        // Şu an için ekstra metot yok, eklenirse buraya yazılabilir
     }
 } 

@@ -21,14 +21,14 @@ namespace JobApplicationProject.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTaskItems()
         {
-            return Ok(await _service.GetAllTaskItemsAsync());
+            return Ok(await _service.GetAllAsync());
         }
 
         // GET: api/TaskItems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskItem>> GetTaskItem(long id)
         {
-            var taskItem = await _service.GetTaskItemByIdAsync(id);
+            var taskItem = await _service.GetByIdAsync(id);
 
             if (taskItem == null)
             {
@@ -43,7 +43,7 @@ namespace JobApplicationProject.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTaskItem(long id, TaskItem taskItem)
         {
-            var result = await _service.UpdateTaskItemAsync(id, taskItem);
+            var result = await _service.UpdateAsync(id, taskItem);
             if (!result)
             {
                 return BadRequest();
@@ -57,7 +57,7 @@ namespace JobApplicationProject.Controllers
         [HttpPost]
         public async Task<ActionResult<TaskItem>> PostTaskItem(TaskItem taskItem)
         {
-            var createdTaskItem = await _service.CreateTaskItemAsync(taskItem);
+            var createdTaskItem = await _service.CreateAsync(taskItem);
             return CreatedAtAction(nameof(GetTaskItem), new { id = createdTaskItem.Id }, createdTaskItem);
         }
 
@@ -65,7 +65,7 @@ namespace JobApplicationProject.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTaskItem(long id)
         {
-            var result = await _service.DeleteTaskItemAsync(id);
+            var result = await _service.DeleteAsync(id);
             if (!result)
             {
                 return NotFound();
