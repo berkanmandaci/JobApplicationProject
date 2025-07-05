@@ -11,5 +11,6 @@ namespace JobApplicationProject.Contracts
         Task<TaskItem> CreateTaskItemAsync(TaskItem taskItem);
         Task<bool> UpdateTaskItemAsync(long id, TaskItem taskItem);
         Task<bool> DeleteTaskItemAsync(long id);
+        Task<IEnumerable<TaskItem>> GetTaskItemsByProjectIdAsync(long projectId);
     }
 } 

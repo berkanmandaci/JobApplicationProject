@@ -53,5 +53,9 @@ namespace JobApplicationProject.Services
             _repository.Delete(taskItem);
             return await _repository.SaveChangesAsync();
         }
+        public async Task<IEnumerable<TaskItem>> GetTaskItemsByProjectIdAsync(long projectId)
+        {
+            return await _repository.GetByProjectIdAsync(projectId);
+        }
     }
 } 

@@ -67,6 +67,56 @@
                             <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteProject(project.Id)">Sil</button>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="3">
+                            <!-- Görevler Tablosu -->
+                            <div class="ms-4">
+                                <h6>Görevler</h6>
+                                @if (project.TaskItems == null || !project.TaskItems.Any())
+                                {
+                                    <div class="alert alert-light py-1">Bu projeye ait görev yok.</div>
+                                }
+                                else
+                                {
+                                    <table class="table table-sm mb-2">
+                                        <thead>
+                                            <tr>
+                                                <th>Adı</th>
+                                                <th>Tamamlandı mı?</th>
+                                                <th class="text-end">İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var task in project.TaskItems)
+                                            {
+                                                <tr>
+                                                    <td>@task.Name</td>
+                                                    <td>
+                                                        <InputCheckbox class="form-check-input"
+                                                                       Value="task.IsComplete"
+                                                                       ValueChanged="async (bool value) => await ToggleTaskComplete(task, value)"
+                                                                       ValueExpression="@(() => task.IsComplete)" />
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteTask(task.Id, project.Id)">Sil</button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                <!-- Görev Ekleme Formu -->
+                                <EditForm Model="newTask" OnValidSubmit="@(() => AddTask(project.Id))" FormName="TaskForm" class="row g-2 align-items-end mb-2">
+                                    <div class="col-md-9">
+                                        <InputText class="form-control" placeholder="Görev adı" @bind-Value="newTask.Name" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-success w-100">Ekle</button>
+                                    </div>
+                                </EditForm>
+                            </div>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

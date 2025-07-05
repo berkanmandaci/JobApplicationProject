@@ -13,5 +13,6 @@ namespace JobApplicationProject.Contracts
         void Delete(TaskItem taskItem);
         Task<bool> SaveChangesAsync();
         bool Exists(long id);
+        Task<IEnumerable<TaskItem>> GetByProjectIdAsync(long projectId);
     }
 } 

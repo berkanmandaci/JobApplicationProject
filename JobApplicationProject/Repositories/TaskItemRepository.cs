@@ -50,5 +50,13 @@ namespace JobApplicationProject.Repositories
         {
             return _context.TaskItems.Any(e => e.Id == id);
         }
+
+
+        public async Task<IEnumerable<TaskItem>> GetByProjectIdAsync(long projectId)
+        {
+            return await _context.TaskItems
+                .Where(t => t.ProjectId == projectId)
+                .ToListAsync();
+        }
     }
 } 

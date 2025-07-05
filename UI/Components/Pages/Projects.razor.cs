@@ -11,9 +11,11 @@ namespace UI.Components.Pages
     public partial class ProjectsBase : ComponentBase
     {
         [Inject] protected IProjectService ProjectService { get; set; } = default!;
+        [Inject] protected ITaskItemService TaskItemService { get; set; } = default!;
 
         protected List<Project>? projects;
         protected Project editProject = new();
+        protected TaskItem newTask = new();
 
         protected override async Task OnInitializedAsync()
         {
@@ -58,6 +60,28 @@ namespace UI.Components.Pages
         protected async Task DeleteProject(long id)
         {
             await ProjectService.DeleteProjectAsync(id);
+            await LoadProjects();
+        }
+
+        protected async Task AddTask(long projectId)
+        {
+            newTask.ProjectId = projectId;
+            newTask.IsComplete = false; // Görev eklerken her zaman tamamlanmadı olarak başlasın
+            await TaskItemService.CreateTaskItemAsync(newTask);
+            newTask = new();
+            await LoadProjects();
+        }
+
+        protected async Task DeleteTask(long taskId, long projectId)
+        {
+            await TaskItemService.DeleteTaskItemAsync(taskId);
+            await LoadProjects();
+        }
+
+        protected async Task ToggleTaskComplete(TaskItem task, bool value)
+        {
+            task.IsComplete = value;
+            await TaskItemService.UpdateTaskItemAsync(task.Id, task);
             await LoadProjects();
         }
     }
