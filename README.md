@@ -1,38 +1,35 @@
-# Proje Yönetimi Sistemi API
+# Proje Yönetimi Sistemi (Blazor Server)
 
-Bu proje, projeleri ve bu projelere bağlı görevleri yönetmek için tasarlanmış bir RESTful API'sidir. Temiz mimari prensipleri ve modern .NET teknolojileri kullanılarak geliştirilmiştir.
+Bu proje, projeleri ve bu projelere bağlı görevleri yönetmek için tasarlanmış, **Blazor Server tabanlı** modern bir web uygulamasıdır. Temiz kod, SOLID prensipleri ve katmanlı mimari ile geliştirilmiştir. Uygulama doğrudan veritabanına erişir, API katmanı ve Swagger şu an aktif değildir (isteğe bağlı olarak ileride Vue.js ve API eklenecektir).
 
 ## Özellikler
 
 -   **Proje Yönetimi:** Projeler oluşturun, görüntüleyin, güncelleyin ve silin.
 -   **Görev Yönetimi:** Projelere bağlı görevler oluşturun, görüntüleyin, güncelleyin ve silin.
+-   **Blazor Server UI:** Modern, etkileşimli ve erişilebilir arayüz.
 -   **İlişkisel Veritabanı:** Projeler ve görevler arasında bire çok ilişki (bir proje birden çok görev içerebilir).
+-   **Temiz Kod ve SOLID:** Kodun sürdürülebilirliği ve okunabilirliği için en iyi pratikler uygulanmıştır.
 
 ## Kullanılan Teknolojiler
 
--   **.NET 8:** Modern ve yüksek performanslı bir arka uç geliştirme çerçevesi.
--   **ASP.NET Core Web API:** RESTful servisler oluşturmak için kullanılır.
--   **Entity Framework Core:** Veritabanı etkileşimleri için bir ORM (Object-Relational Mapper) aracıdır. Code-First yaklaşımıyla veritabanı şeması yönetilir.
--   **PostgreSQL:** Güçlü, açık kaynaklı bir ilişkisel veritabanı sistemi.
--   **Docker:** Uygulamanın ve veritabanının kapsayıcılar içinde izole bir şekilde çalıştırılması için kullanılır.
--   **Swagger/OpenAPI:** API dokümantasyonu ve etkileşimli test arayüzü sağlar.
+-   **.NET 8 & Blazor Server:** Modern, gerçek zamanlı ve C# tabanlı web arayüzü.
+-   **Entity Framework Core:** Veritabanı işlemleri için ORM (Object-Relational Mapper).
+-   **PostgreSQL:** Güçlü, açık kaynaklı ilişkisel veritabanı.
+-   **Docker:** Uygulamanın ve veritabanının kapsayıcılar içinde izole çalıştırılması.
 
 ## Mimari Yaklaşım
 
-Proje, Clean Architecture ve SOLID prensipleri gözetilerek tasarlanmıştır. Bu, kodun daha modüler, test edilebilir ve sürdürülebilir olmasını sağlar:
+Proje, Clean Architecture ve SOLID prensipleriyle tasarlanmıştır:
 
--   **Modeller (Models):** Uygulamanın temel veri yapılarını (Project, TaskItem) içerir.
--   **Kontratlar (Contracts):** Uygulamanın iş mantığı ve veri erişim katmanları arasındaki arayüzleri (ITaskItemRepository, IProjectRepository, ITaskItemService, IProjectService) tanımlar.
--   **Depolar (Repositories):** Veritabanı etkileşimlerini soyutlar ve `TodoContext` üzerinden Entity Framework Core kullanarak veri operasyonlarını gerçekleştirir.
--   **Hizmetler (Services):** Uygulamanın iş mantığını içerir ve depo katmanını kullanarak veri operasyonlarını düzenler.
--   **Kontrolcüler (Controllers):** API endpoint'lerini tanımlar ve gelen HTTP isteklerini hizmet katmanına yönlendirir.
+-   **Modeller (Models):** Temel veri yapıları (Project, TaskItem).
+-   **Kontratlar (Contracts):** Servis ve repository arayüzleri (IProjectService, ITaskItemService, IProjectRepository, ITaskItemRepository).
+-   **Depolar (Repositories):** Entity Framework Core ile veri erişimi.
+-   **Hizmetler (Services):** İş mantığı ve veri operasyonları.
+-   **Blazor Componentleri:** UI ve iş mantığı code-behind ile ayrılmıştır.
 
 ## Başlarken
 
-Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin.
-
 ### Ön Koşullar
-
 -   [Docker Desktop](https://www.docker.com/products/docker-desktop/) kurulu olmalıdır.
 
 ### Kurulum ve Çalıştırma (Docker ile)
@@ -44,68 +41,49 @@ Bu projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izl
     ```
 
 2.  **Veritabanı Kimlik Bilgilerini Ayarlayın:**
-    `docker-compose.yml` dosyası, PostgreSQL veritabanı için ortam değişkenlerini kullanır. Bu değişkenleri Docker Compose çalıştırmadan önce terminalinizde ayarlamanız gerekmektedir.
+    `docker-compose.yml` dosyası, PostgreSQL veritabanı için ortam değişkenlerini kullanır. Bu değişkenleri Docker Compose çalıştırmadan önce terminalinizde ayarlayın.
 
     **PowerShell için:**
     ```powershell
-    $env:ADMIN_USERNAME="sizin_kullanıcı_adınız"
-    $env:ADMIN_PASSWORD="sizin_şifreniz"
+    $env:ADMIN_USERNAME="admin"
+    $env:ADMIN_PASSWORD="admin"
     ```
-    *Lütfen `sizin_kullanıcı_adınız` ve `sizin_şifreniz` kısımlarını kendi belirlediğiniz güvenli kimlik bilgileriyle değiştirin.*
+    *Varsayılan olarak admin/admin kullanılır, isterseniz değiştirebilirsiniz.*
 
 3.  **Uygulamayı Başlatın:**
-
     ```bash
     docker compose up --build
     ```
-    Bu komut, hem PostgreSQL veritabanı hem de .NET Web API uygulaması için Docker kapsayıcılarını oluşturacak ve başlatacaktır. İlk çalıştırma biraz zaman alabilir.
+    Bu komut, hem PostgreSQL veritabanı hem de Blazor Server uygulaması için Docker kapsayıcılarını oluşturacak ve başlatacaktır.
 
 4.  **Kapsayıcıların Çalıştığını Doğrulayın:**
-    Yeni bir terminal açın ve aşağıdaki komutu çalıştırın:
-
     ```bash
     docker ps
     ```
-    `jobapplicationproject-api-1` ve `jobapplicationproject-db-1` kapsayıcılarının `Up` durumda olduğunu görmelisiniz.
+    `jobapplicationproject-ui-1` ve `jobapplicationproject-db-1` kapsayıcılarının `Up` durumda olduğunu görmelisiniz.
 
-## API Uç Noktaları ve Test Etme (Swagger UI)
+5.  **Blazor Arayüzüne Erişim:**
+    Tarayıcınızda [http://localhost:8080](http://localhost:8080) (veya docker-compose.yml'deki port ayarına göre) adresine gidin.
 
-Uygulama başarıyla başladıktan sonra, API'ye Swagger UI üzerinden erişebilirsiniz:
+## Uygulama Kullanımı
 
-[http://localhost:8080/swagger](http://localhost:8080/swagger)
+-   **Projeler** sekmesinden yeni proje ekleyebilir, mevcut projeleri listeleyebilir, düzenleyebilir veya silebilirsiniz.
+-   Her proje için görevler ekleyip yönetebilirsiniz (görev CRUD işlemleri için benzer component yapısı kullanılabilir).
+-   Arayüzde yapılan tüm işlemler gerçek zamanlı olarak veritabanına yansır.
 
-Swagger UI, API'nizin tüm uç noktalarını (endpoints) listeler ve bunları etkileşimli olarak test etmenize olanak tanır.
+## Geliştirici Notları
 
-### Önemli Not: Projeleri ve Görevleri Test Etme Sırası
+-   Kodlar code-behind (partial class) ile ayrılmıştır. UI ve iş mantığı net şekilde ayrılır.
+-   SOLID ve clean code prensiplerine uygun, okunabilir ve sürdürülebilir bir yapı hedeflenmiştir.
+-   İleride API ve Vue.js arayüzü eklemek için altyapı hazırdır (API ve Swagger şu an devre dışı).
 
-Veritabanı ilişkileri nedeniyle, bir görevi oluşturmadan önce o görevin atanacağı bir proje oluşturmanız gerekmektedir.
+## Katkı ve Geliştirme
 
-1.  **Bir Proje Oluşturun (POST /api/Projects):**
-    *   `POST /api/Projects` endpoint'ini genişletin ve `Try it out` düğmesine tıklayın.
-    *   `Request body` bölümüne aşağıdaki gibi bir JSON payload girin (ID otomatik olarak oluşturulacaktır):
-        ```json
-        {
-          "name": "Örnek Proje",
-          "description": "Bu, bir demo projedir."
-        }
-        ```
-    *   `Execute` düğmesine tıklayın. `201 Created` yanıtını aldığınızda, oluşturulan projenin `id` değerini not alın.
+-   Yeni özellikler eklemek veya mevcut componentleri geliştirmek için Blazor component ve code-behind yapısını takip edin.
+-   Kodun okunabilirliğini ve sürdürülebilirliğini ön planda tutun.
 
-2.  **Bu Projeye Bağlı Bir Görev Oluşturun (POST /api/TaskItems):**
-    *   `POST /api/TaskItems` endpoint'ini genişletin ve `Try it out` düğmesine tıklayın.
-    *   `Request body` bölümüne aşağıdaki gibi bir JSON payload girin (ID otomatik olarak oluşturulacaktır):
-        ```json
-        {
-          "name": "Proje Görevi A",
-          "isComplete": false,
-          "projectId": [PROJE_ID_BURAYA] // Önceki adımda not aldığınız proje ID'sini buraya girin
-        }
-        ```
-    *   `Execute` düğmesine tıklayın. `201 Created` yanıtını almalısınız.
+---
 
-3.  **Oluşturulan Projeleri ve Görevleri Görüntüleyin (GET /api/Projects):**
-    *   `GET /api/Projects` endpoint'ini genişletin ve `Try it out` düğmesine tıklayın.
-    *   `Execute` düğmesine tıklayın.
-    *   Dönen JSON yanıtında, oluşturduğunuz projenin `taskItems` dizisinin artık boş olmadığını ve içine eklediğiniz görevleri içerdiğini görmelisiniz.
+Her türlü soru ve katkı için iletişime geçebilirsiniz!
 
 

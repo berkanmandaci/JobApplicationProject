@@ -35,7 +35,14 @@ namespace JobApplicationProject.Repositories
 
         public void Update(Project project)
         {
-            _context.Entry(project).State = EntityState.Modified;
+            var existing = _context.Projects.Find(project.Id);
+            if (existing != null)
+            {
+                existing.Name = project.Name;
+                existing.Description = project.Description;
+                // Diğer property'ler varsa burada güncellenebilir
+                _context.SaveChanges();
+            }
         }
 
         public void Delete(Project project)
