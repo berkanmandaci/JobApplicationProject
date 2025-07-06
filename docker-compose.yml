@@ -27,5 +27,28 @@ services:
       ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     # Connection string burada environment variable ile override edilir, appsettings.json'daki değer development için örnek olarak kalır.
 
+  vue-ui:
+    build:
+      context: ./vue-ui
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - ui
+
+  api:
+    build:
+      context: .
+      dockerfile: JobApplicationProject.Api/Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+
 volumes:
   pgdata: 

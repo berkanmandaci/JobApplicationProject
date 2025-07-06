@@ -1,89 +1,69 @@
-# Proje Yönetimi Sistemi (Blazor Server)
+# Proje Yönetimi Sistemi (Blazor Server, Vue.js, Web API, Docker Compose)
 
-Bu proje, projeleri ve bu projelere bağlı görevleri yönetmek için tasarlanmış, **Blazor Server tabanlı** modern bir web uygulamasıdır. Temiz kod, SOLID prensipleri ve katmanlı mimari ile geliştirilmiştir. Uygulama doğrudan veritabanına erişir, API katmanı ve Swagger şu an aktif değildir (isteğe bağlı olarak ileride Vue.js ve API eklenecektir).
+Bu proje, projeleri ve bu projelere bağlı görevleri yönetmek için geliştirilmiş, **çok katmanlı ve modern bir web uygulamasıdır**. Hem Blazor Server hem de Vue.js ile iki farklı frontend çözümü sunar ve ortak bir .NET class library ile iş mantığı paylaşılır. Tüm servisler Docker Compose ile kolayca ayağa kaldırılır.
 
 ## Özellikler
 
--   **Proje Yönetimi:** Projeler oluşturun, görüntüleyin, güncelleyin ve silin.
--   **Görev Yönetimi:** Projelere bağlı görevler oluşturun, görüntüleyin, güncelleyin ve silin.
--   **Blazor Server UI:** Modern, etkileşimli ve erişilebilir arayüz.
--   **İlişkisel Veritabanı:** Projeler ve görevler arasında bire çok ilişki (bir proje birden çok görev içerebilir).
--   **Temiz Kod ve SOLID:** Kodun sürdürülebilirliği ve okunabilirliği için en iyi pratikler uygulanmıştır.
+- **Proje Yönetimi:** Projeler oluşturulabilir, listelenebilir, güncellenebilir ve silinebilir.
+- **Görev Yönetimi:** Projelere bağlı görevler eklenebilir, listelenebilir, güncellenebilir ve silinebilir.
+- **Blazor Server UI:** Modern, gerçek zamanlı ve C# tabanlı web arayüzü.
+- **Vue.js UI:** Modern, bağımsız ve API tabanlı frontend (SPA).
+- **Web API:** RESTful endpoint'ler ile frontend'lere veri sağlar. Swagger/OpenAPI desteği vardır.
+- **Ortak Class Library:** Hem Blazor hem de API tarafından kullanılan iş mantığı ve veri erişimi.
+- **PostgreSQL:** Güçlü, açık kaynaklı ilişkisel veritabanı.
+- **Docker Compose:** Tüm servisler tek komutla ayağa kalkar.
 
-## Kullanılan Teknolojiler
+## Mimari
 
--   **.NET 8 & Blazor Server:** Modern, gerçek zamanlı ve C# tabanlı web arayüzü.
--   **Entity Framework Core:** Veritabanı işlemleri için ORM (Object-Relational Mapper).
--   **PostgreSQL:** Güçlü, açık kaynaklı ilişkisel veritabanı.
--   **Docker:** Uygulamanın ve veritabanının kapsayıcılar içinde izole çalıştırılması.
+- **JobApplicationProject:** Ortak class library (iş mantığı, veri erişimi, modeller)
+- **JobApplicationProject.Api:** .NET 8 Web API (REST endpoint'ler, Swagger)
+- **UI:** Blazor Server arayüzü (C# tabanlı)
+- **vue-ui:** Vue.js 3 + Vite ile SPA arayüzü (API ile konuşur)
+- **PostgreSQL:** Veritabanı
 
-## Mimari Yaklaşım
-
-Proje, Clean Architecture ve SOLID prensipleriyle tasarlanmıştır:
-
--   **Modeller (Models):** Temel veri yapıları (Project, TaskItem).
--   **Kontratlar (Contracts):** Servis ve repository arayüzleri (IProjectService, ITaskItemService, IProjectRepository, ITaskItemRepository).
--   **Depolar (Repositories):** Entity Framework Core ile veri erişimi.
--   **Hizmetler (Services):** İş mantığı ve veri operasyonları.
--   **Blazor Componentleri:** UI ve iş mantığı code-behind ile ayrılmıştır.
-
-## Başlarken
+## Kurulum ve Çalıştırma
 
 ### Ön Koşullar
--   [Docker Desktop](https://www.docker.com/products/docker-desktop/) kurulu olmalıdır.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) kurulu olmalı.
 
-### Kurulum ve Çalıştırma (Docker ile)
+### Hızlı Başlangıç (Tüm Servisler İçin)
 
-1.  **Depoyu Klonlayın:**
+1. **Depoyu Klonlayın:**
     ```bash
-    git clone https://github.com/berkanmandaci/JobApplicationProject.git
+    git clone https://github.com/berkanmandaci/
+    JobApplicationProject.git
     cd JobApplicationProject
     ```
-
-2.  **Veritabanı Kimlik Bilgilerini Ayarlayın:**
-    `docker-compose.yml` dosyası, PostgreSQL veritabanı için ortam değişkenlerini kullanır. Bu değişkenleri Docker Compose çalıştırmadan önce terminalinizde ayarlayın.
-
-    **PowerShell için:**
+2. **Gerekli Ortam Değişkenlerini Ayarlayın:**
     ```powershell
-    $env:ADMIN_USERNAME="admin"
-    $env:ADMIN_PASSWORD="admin"
-    ```
-    *Varsayılan olarak admin/admin kullanılır, isterseniz değiştirebilirsiniz.*
+    $env:POSTGRES_DB="JobApplicationDb"
+    $env:POSTGRES_USER="admin"
+    $env:POSTGRES_PASSWORD="admin"
 
-3.  **Uygulamayı Başlatın:**
+    ```
+3. **Tüm Servisleri Başlatın:**
     ```bash
-    docker compose up --build
+    docker-compose up --build
     ```
-    Bu komut, hem PostgreSQL veritabanı hem de Blazor Server uygulaması için Docker kapsayıcılarını oluşturacak ve başlatacaktır.
+4. **Servislere Erişim:**
+    - **Blazor Server UI:** [http://localhost:8080](http://localhost:8080)
+    - **Vue.js UI:** [http://localhost:8081](http://localhost:8081)
+    - **Web API (Swagger):** [http://localhost:5000/swagger](http://localhost:5000/swagger)
+    - **PostgreSQL:** Port 5435 üzerinden erişilebilir
 
-4.  **Kapsayıcıların Çalıştığını Doğrulayın:**
-    ```bash
-    docker ps
-    ```
-    `jobapplicationproject-ui-1` ve `jobapplicationproject-db-1` kapsayıcılarının `Up` durumda olduğunu görmelisiniz.
+## Kullanım
 
-5.  **Blazor Arayüzüne Erişim:**
-    Tarayıcınızda [http://localhost:8080](http://localhost:8080) (veya docker-compose.yml'deki port ayarına göre) adresine gidin.
-
-## Uygulama Kullanımı
-
--   **Projeler** sekmesinden yeni proje ekleyebilir, mevcut projeleri listeleyebilir, düzenleyebilir veya silebilirsiniz.
--   Her proje için görevler ekleyip yönetebilirsiniz (görev CRUD işlemleri için benzer component yapısı kullanılabilir).
--   Arayüzde yapılan tüm işlemler gerçek zamanlı olarak veritabanına yansır.
+- **Projeler** sekmesinden yeni proje ekleyebilir, mevcut projeleri listeleyebilir, düzenleyebilir veya silebilirsiniz.
+- Her proje için görevler ekleyip yönetebilirsiniz (görev CRUD işlemleri için benzer component yapısı kullanılabilir).
+- Blazor Server arayüzü doğrudan class library ile, Vue.js arayüzü ise Web API üzerinden veriyle çalışır.
 
 ## Geliştirici Notları
 
--   Kodlar code-behind (partial class) ile ayrılmıştır. UI ve iş mantığı net şekilde ayrılır.
--   SOLID ve clean code prensiplerine uygun, okunabilir ve sürdürülebilir bir yapı hedeflenmiştir.
--   İleride API ve Vue.js arayüzü eklemek için altyapı hazırdır (API ve Swagger şu an devre dışı).
-
-## Katkı ve Geliştirme
-
--   Yeni özellikler eklemek veya mevcut componentleri geliştirmek için Blazor component ve code-behind yapısını takip edin.
--   Kodun okunabilirliğini ve sürdürülebilirliğini ön planda tutun.
-
----
-
-Her türlü soru ve katkı için iletişime geçebilirsiniz!
-
+- **Çok Katmanlı Mimari:** Ortak iş mantığı ve veri erişimi class library'de tutulur. Hem Blazor hem de API bu katmanı kullanır.
+- **Blazor Server:** .NET'in component tabanlı, hızlı ve entegre arayüzü. API'ye ihtiyaç duymadan doğrudan class library ile çalışır.
+- **Vue.js:** Modern, bağımsız frontend. Sadece Web API ile konuşur. Gerçek dünyada en çok tercih edilen frontend mimarisi budur.
+- **Web API:** Tüm frontend'lere RESTful endpoint sağlar. Swagger ile kolayca test edilebilir.
+- **Docker Compose:** Tüm servisler tek komutla ayağa kalkar, port çakışmaları önlenmiştir.
+- **SPA Routing (Vue.js):** Nginx config ile SPA route'ları desteklenir.
+- **CORS:** API'de CORS açık, farklı frontend'ler rahatça erişebilir.
 
