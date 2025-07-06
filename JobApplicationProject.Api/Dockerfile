@@ -2,13 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Projeleri ve bağımlılık projelerini kopyala
-COPY JobApplicationProject/ JobApplicationProject/
-COPY JobApplicationProject.Api/ JobApplicationProject.Api/
+# Proje dosyalarını önce kopyala ve restore et (cache için)
+COPY ["JobApplicationProject/JobApplicationProject.csproj", "JobApplicationProject/"]
+COPY ["JobApplicationProject.Api/JobApplicationProject.Api.csproj", "JobApplicationProject.Api/"]
+RUN dotnet restore "JobApplicationProject.Api/JobApplicationProject.Api.csproj"
 
+# Tüm source kodunu kopyala
+COPY . .
 WORKDIR /src/JobApplicationProject.Api
-RUN dotnet restore
-
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime aşaması

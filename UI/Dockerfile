@@ -6,9 +6,13 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UI/UI.csproj", "UI/"]
+
+# Proje dosyalarını önce kopyala ve restore et (cache için)
 COPY ["JobApplicationProject/JobApplicationProject.csproj", "JobApplicationProject/"]
+COPY ["UI/UI.csproj", "UI/"]
 RUN dotnet restore "UI/UI.csproj"
+
+# Tüm source kodunu kopyala
 COPY . .
 WORKDIR "/src/UI"
 RUN dotnet build "UI.csproj" -c $BUILD_CONFIGURATION -o /app/build
