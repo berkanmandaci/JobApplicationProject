@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API ana adresi (gerekirse portu ve adresi backend'e göre güncelle)
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://13.60.207.57:5000/api';
 
 // Projeleri getir
 export async function getProjects() {
