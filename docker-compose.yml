@@ -47,8 +47,8 @@ services:
       context: .
       dockerfile: JobApplicationProject.Api/Dockerfile
     restart: unless-stopped
-    expose:
-      - "5000"
+    ports:
+      - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Database=JobApplicationDb;Username=admin;Password=admin
