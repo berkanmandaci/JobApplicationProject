@@ -12,6 +12,11 @@ services:
       - "5435:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   ui:
     build:
@@ -21,11 +26,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-    # Connection string burada environment variable ile override edilir, appsettings.json'daki değer development için örnek olarak kalır.
+       - ASPNETCORE_ENVIRONMENT=Development
+       - ConnectionStrings__DefaultConnection=Host=db;Database=JobApplicationDb;Username=admin;Password=admin
 
   vue-ui:
     build:
@@ -41,14 +46,15 @@ services:
     build:
       context: .
       dockerfile: JobApplicationProject.Api/Dockerfile
-    restart: always
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
+    restart: unless-stopped
+    expose:
+      - "5000"
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=JobApplicationDb;Username=admin;Password=admin
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata: 

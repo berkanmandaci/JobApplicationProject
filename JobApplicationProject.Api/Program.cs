@@ -6,20 +6,23 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<TodoContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("JobApplicationProject")
+    ));
 
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
 
-  builder.Services.AddCors(options =>
-  {
-      options.AddDefaultPolicy(policy =>
-      {
-          policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-      });
-  });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -36,11 +39,6 @@ if (app.Environment.IsDevelopment())
 
 
 app.MapControllers();
-  app.UseCors();
+app.UseCors();
 
-  using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<TodoContext>();
-    db.Database.Migrate();
-}
 app.Run();
