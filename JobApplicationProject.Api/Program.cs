@@ -37,4 +37,10 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
   app.UseCors();
+
+  using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TodoContext>();
+    db.Database.Migrate();
+}
 app.Run();
