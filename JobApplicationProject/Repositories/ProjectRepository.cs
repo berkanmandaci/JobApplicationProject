@@ -11,7 +11,11 @@ namespace JobApplicationProject.Repositories
     {
         public ProjectRepository(TodoContext context) : base(context)
         {
+
         }
-        // Şu an için Project entity'sine özel ekstra metot yok
+        public override async Task<IEnumerable<Project>> GetAllAsync()
+        {
+            return await _dbSet.Include(p => p.TaskItems).ToListAsync();
+        }
     }
-} 
+}
