@@ -13,10 +13,10 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Durum</label>
-          <select v-model="form.isCompleted" class="form-select">
-            <option :value="false">Bekliyor</option>
-            <option :value="true">Tamamlandı</option>
-          </select>
+          <div class="form-check">
+            <input v-model="form.isCompleted" type="checkbox" class="form-check-input" id="isCompletedCheck" />
+            <label class="form-check-label" for="isCompletedCheck">Tamamlandı mı?</label>
+          </div>
         </div>
         <button type="submit" class="btn btn-success me-2">Kaydet</button>
         <button type="button" class="btn btn-secondary" @click="$emit('cancel')">İptal</button>
@@ -43,10 +43,15 @@ export default {
     }, { immediate: true });
 
     async function onSubmit() {
+      const taskPayload = {
+        name: form.value.title,
+        isComplete: form.value.isCompleted,
+        projectId: props.projectId,
+      };
       if (form.value.id) {
-        await updateTask(props.projectId, form.value.id, form.value);
+        await updateTask(form.value.id, { ...taskPayload, id: form.value.id });
       } else {
-        await createTask(props.projectId, form.value);
+        await createTask(taskPayload);
       }
       emit('saved');
     }

@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using JobApplicationProject.Contracts;
 using JobApplicationProject.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace UI.Components.Pages
 {
-    // Context7 ve modern Razor için temiz code-behind
+
     public partial class ProjectsBase : ComponentBase
     {
         [Inject] protected IProjectService ProjectService { get; set; } = default!;
@@ -43,7 +41,7 @@ namespace UI.Components.Pages
 
         protected void EditProject(Project project)
         {
-            // Derin kopya ile formu doldur
+        
             editProject = new Project
             {
                 Id = project.Id,
@@ -66,7 +64,7 @@ namespace UI.Components.Pages
         protected async Task AddTask(long projectId)
         {
             newTask.ProjectId = projectId;
-            newTask.IsComplete = false; // Görev eklerken her zaman tamamlanmadı olarak başlasın
+            newTask.IsComplete = false; 
             await TaskItemService.CreateAsync(newTask);
             newTask = new();
             await LoadProjects();

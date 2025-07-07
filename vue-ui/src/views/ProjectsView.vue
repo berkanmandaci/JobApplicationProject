@@ -1,6 +1,7 @@
 <template>
   <div class="container mt-4">
     <h2>Projeler</h2>
+    <p class="text-muted">Bir projenin görevlerini görmek için ilgili satırdaki <b>Görevler</b> butonuna tıklayın.</p>
     <button class="btn btn-primary mb-3" @click="showAddForm = true">Yeni Proje Ekle</button>
     <ProjectForm v-if="showAddForm" @saved="onProjectSaved" @cancel="showAddForm = false" />
     <ProjectList :projects="projects" @edit="onEditProject" @delete="onDeleteProject" />
