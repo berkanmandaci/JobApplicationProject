@@ -10,6 +10,5 @@ namespace JobApplicationProject.Services
         public ProjectService(IProjectRepository repository) : base(repository)
         {
         }
-        // Şu an için Project entity'sine özel ekstra metot yok
     }
 } 
