@@ -7,6 +7,9 @@ using JobApplicationProject.DTOs;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using JobApplicationProject.Repositories;
 
 public class TaskItemServiceTests
 {
@@ -101,5 +104,46 @@ public class TaskItemServiceTests
         var result = await _service.DeleteAsync(1);
 
         Assert.False(result);
+    }
+}
+
+public class TaskItemIntegrationTests
+{
+    [Fact]
+    public async Task UpdateTask_ShouldNotDeleteTask()
+    {
+        // Arrange: In-memory veritabanı ve AutoMapper konfigürasyonu
+        var options = new DbContextOptionsBuilder<TodoContext>()
+            .UseInMemoryDatabase(databaseName: "TaskItemTestDb")
+            .Options;
+        using var context = new TodoContext(options);
+
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Project, ProjectDto>().ReverseMap()
+                .ForMember(dest => dest.TaskItems, opt => opt.Ignore());
+            cfg.CreateMap<TaskItem, TaskItemDto>().ReverseMap();
+        });
+        var mapper = config.CreateMapper();
+
+        var taskRepo = new TaskItemRepository(context);
+        var service = new GenericService<TaskItem, TaskItemDto>(taskRepo, mapper);
+
+        // Proje ve bir task ekle
+        var project = new Project { Name = "Test Project" };
+        var task = new TaskItem { Name = "Task1", Project = project };
+        context.Projects.Add(project);
+        context.TaskItems.Add(task);
+        context.SaveChanges();
+
+        // Task'ı güncelle (sadece ismini değiştir)
+        var taskDto = mapper.Map<TaskItemDto>(task);
+        taskDto.Name = "Updated Task";
+        await service.UpdateAsync(task.Id, taskDto);
+
+        // Kontrol: Task silinmedi mi?
+        var updatedTask = context.TaskItems.First(t => t.Id == task.Id);
+        Assert.Equal("Updated Task", updatedTask.Name);
+        Assert.Equal(project.Id, updatedTask.ProjectId);
     }
 }

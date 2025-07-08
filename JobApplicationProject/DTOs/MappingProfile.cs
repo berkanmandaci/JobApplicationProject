@@ -7,7 +7,8 @@ namespace JobApplicationProject.DTOs
     {
         public MappingProfile()
         {
-            CreateMap<Project, ProjectDto>().ReverseMap();
+            CreateMap<Project, ProjectDto>().ReverseMap()
+                .ForMember(dest => dest.TaskItems, opt => opt.Ignore());
             CreateMap<TaskItem, TaskItemDto>().ReverseMap();
         }
     }
