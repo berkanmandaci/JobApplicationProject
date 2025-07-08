@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using JobApplicationProject.Models;
 using JobApplicationProject.Contracts;
+using JobApplicationProject.DTOs;
 
 namespace JobApplicationProject.Controllers
 {
@@ -17,14 +17,14 @@ namespace JobApplicationProject.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ProjectDto>>> GetProjects()
         {
             return Ok(await _service.GetAllAsync());
         }
 
         // GET: api/Projects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(long id)
+        public async Task<ActionResult<ProjectDto>> GetProject(long id)
         {
             var project = await _service.GetByIdAsync(id);
 
@@ -38,7 +38,7 @@ namespace JobApplicationProject.Controllers
 
         // PUT: api/Projects/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(long id, Project project)
+        public async Task<IActionResult> PutProject(long id, ProjectDto project)
         {
             var result = await _service.UpdateAsync(id, project);
             if (!result)
@@ -51,7 +51,7 @@ namespace JobApplicationProject.Controllers
 
         // POST: api/Projects
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        public async Task<ActionResult<ProjectDto>> PostProject(ProjectDto project)
         {
             var createdProject = await _service.CreateAsync(project);
             return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);

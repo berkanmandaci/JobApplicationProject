@@ -7,10 +7,7 @@
           <label class="form-label">Başlık</label>
           <input v-model="form.title" type="text" class="form-control" required />
         </div>
-        <div class="mb-3">
-          <label class="form-label">Açıklama</label>
-          <textarea v-model="form.description" class="form-control" rows="2"></textarea>
-        </div>
+   
         <div class="mb-3">
           <label class="form-label">Durum</label>
           <div class="form-check">

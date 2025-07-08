@@ -1,41 +1,47 @@
 using JobApplicationProject.Contracts;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace JobApplicationProject.Services
 {
-    public class GenericService<T> : IGenericService<T> where T : class
+    public class GenericService<TEntity, TDto> : IGenericService<TEntity, TDto>
+        where TEntity : class
+        where TDto : class
     {
-        protected readonly IGenericRepository<T> _repository;
-
-        public GenericService(IGenericRepository<T> repository)
+        protected readonly IGenericRepository<TEntity> _repository;
+        private readonly IMapper _mapper;
+        public GenericService(IGenericRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<TDto>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            var entities = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<TDto>>(entities);
         }
 
-        public virtual async Task<T?> GetByIdAsync(long id)
+        public virtual async Task<TDto?> GetByIdAsync(long id)
         {
-            return await _repository.GetByIdAsync(id);
+            var entity = await _repository.GetByIdAsync(id);
+            return entity == null ? null : _mapper.Map<TDto>(entity);
         }
 
-        public virtual async Task<T> CreateAsync(T entity)
+        public virtual async Task<TDto> CreateAsync(TDto dto)
         {
+            var entity = _mapper.Map<TEntity>(dto);
             await _repository.AddAsync(entity);
             await _repository.SaveChangesAsync();
-            return entity;
+            return _mapper.Map<TDto>(entity);
         }
 
-        public virtual async Task<bool> UpdateAsync(long id, T entity)
+        public virtual async Task<bool> UpdateAsync(long id, TDto dto)
         {
             var existing = await _repository.GetByIdAsync(id);
             if (existing == null)
                 return false;
-            _repository.Update(entity);
+            _mapper.Map(dto, existing);
+            _repository.Update(existing);
             return await _repository.SaveChangesAsync();
         }
 

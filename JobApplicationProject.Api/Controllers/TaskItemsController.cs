@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using JobApplicationProject.Models;
 using JobApplicationProject.Contracts;
+using JobApplicationProject.DTOs;
 
 namespace JobApplicationProject.Controllers
 {
@@ -19,14 +17,14 @@ namespace JobApplicationProject.Controllers
 
         // GET: api/TaskItems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTaskItems()
+        public async Task<ActionResult<IEnumerable<TaskItemDto>>> GetTaskItems()
         {
             return Ok(await _service.GetAllAsync());
         }
 
         // GET: api/TaskItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskItem>> GetTaskItem(long id)
+        public async Task<ActionResult<TaskItemDto>> GetTaskItem(long id)
         {
             var taskItem = await _service.GetByIdAsync(id);
 
@@ -39,9 +37,8 @@ namespace JobApplicationProject.Controllers
         }
 
         // PUT: api/TaskItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTaskItem(long id, TaskItem taskItem)
+        public async Task<IActionResult> PutTaskItem(long id, TaskItemDto taskItem)
         {
             var result = await _service.UpdateAsync(id, taskItem);
             if (!result)
@@ -55,7 +52,7 @@ namespace JobApplicationProject.Controllers
         // POST: api/TaskItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TaskItem>> PostTaskItem(TaskItem taskItem)
+        public async Task<ActionResult<TaskItemDto>> PostTaskItem(TaskItemDto taskItem)
         {
             var createdTaskItem = await _service.CreateAsync(taskItem);
             return CreatedAtAction(nameof(GetTaskItem), new { id = createdTaskItem.Id }, createdTaskItem);

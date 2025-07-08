@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JobApplicationProject.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20250704210850_Initial")]
+    [Migration("20250708215259_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,6 +36,7 @@ namespace JobApplicationProject.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -55,6 +56,7 @@ namespace JobApplicationProject.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("ProjectId")

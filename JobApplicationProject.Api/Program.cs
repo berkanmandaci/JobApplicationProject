@@ -1,4 +1,5 @@
 using JobApplicationProject.Contracts;
+using JobApplicationProject.DTOs;
 using JobApplicationProject.Repositories;
 using JobApplicationProject.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

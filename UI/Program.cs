@@ -1,6 +1,7 @@
 using JobApplicationProject.Repositories;
 using JobApplicationProject.Services;
 using JobApplicationProject.Contracts;
+using JobApplicationProject.DTOs;
 using Microsoft.EntityFrameworkCore;
 using UI.Components;
 
@@ -17,6 +18,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskItemService, TaskItemService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

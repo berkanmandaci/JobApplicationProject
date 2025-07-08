@@ -1,14 +1,16 @@
+using AutoMapper;
 using JobApplicationProject.Contracts;
+using JobApplicationProject.DTOs;
 using JobApplicationProject.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace JobApplicationProject.Services
 {
-    public class ProjectService : GenericService<Project>, IProjectService
+    public class ProjectService : GenericService<Project, ProjectDto>, IProjectService
     {
-        public ProjectService(IProjectRepository repository) : base(repository)
+        private readonly IMapper _mapper;
+        public ProjectService(IProjectRepository repository, IMapper mapper) : base(repository, mapper)
         {
+            _mapper = mapper;
         }
     }
 } 

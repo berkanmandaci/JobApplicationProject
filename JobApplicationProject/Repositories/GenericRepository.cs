@@ -34,17 +34,17 @@ namespace JobApplicationProject.Repositories
 
         public virtual void Update(T entity)
         {
-            // _context.Update(entity);
-            var tracked = _dbSet.Local.FirstOrDefault(e => _context.Entry(e).Property("Id").CurrentValue.Equals(_context.Entry(entity).Property("Id").CurrentValue));
-            if (tracked != null)
-            {
-                _context.Entry(tracked).CurrentValues.SetValues(entity);
-            }
-            else
-            {
-                _dbSet.Attach(entity);
-                _context.Entry(entity).State = EntityState.Modified;
-            }
+            _context.Update(entity);
+            // var tracked = _dbSet.Local.FirstOrDefault(e => _context.Entry(e).Property("Id").CurrentValue.Equals(_context.Entry(entity).Property("Id").CurrentValue));
+            // if (tracked != null)
+            // {
+            //     _context.Entry(tracked).CurrentValues.SetValues(entity);
+            // }
+            // else
+            // {
+            //     _dbSet.Attach(entity);
+            //     _context.Entry(entity).State = EntityState.Modified;
+            // }
         }
 
         public virtual void Delete(T entity)

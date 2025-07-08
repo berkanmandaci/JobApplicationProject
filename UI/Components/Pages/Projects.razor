@@ -12,6 +12,7 @@
     <EditForm Model="editProject" OnValidSubmit="HandleValidSubmit" FormName="ProjectForm" class="mb-4">
         <DataAnnotationsValidator />
         <ValidationSummary />
+        
         <div class="row g-2 align-items-end">
             <div class="col-md-4">
                 <label for="projectName" class="form-label">Proje Adı</label>
@@ -59,7 +60,7 @@
                         <td>@project.Description</td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => EditProject(project)">Düzenle</button>
-                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteProject(project.Id)">Sil</button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => ConfirmDeleteProject(project.Id)">Sil</button>
                         </td>
                     </tr>
                     <tr>
@@ -78,6 +79,7 @@
                                             <tr>
                                                 <th>Adı</th>
                                                 <th>Tamamlandı mı?</th>
+                                           
                                                 <th class="text-end">İşlemler</th>
                                             </tr>
                                         </thead>
@@ -93,7 +95,8 @@
                                                                        ValueExpression="@(() => task.IsComplete)" />
                                                     </td>
                                                     <td class="text-end">
-                                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteTask(task.Id, project.Id)">Sil</button>
+                                                        <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => EditTask(task)">Düzenle</button>
+                                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => ConfirmDeleteTask(task.Id, project.Id)">Sil</button>
                                                     </td>
                                                 </tr>
                                             }
@@ -101,12 +104,14 @@
                                     </table>
                                 }
                                 <!-- Görev Ekleme Formu -->
-                                <EditForm Model="newTask" OnValidSubmit="@(() => AddTask(project.Id))" FormName="TaskForm" class="row g-2 align-items-end mb-2">
+                                <EditForm Model="editTaskItem" OnValidSubmit="@(() => HandleValidTaskSubmit(project.Id))" FormName="TaskForm" class="row g-2 align-items-end mb-2">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
                                     <div class="col-md-9">
-                                        <InputText class="form-control" placeholder="Görev adı" @bind-Value="newTask.Name" />
+                                        <InputText class="form-control" placeholder="Görev adı" @bind-Value="editTaskItem.Name" />
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="submit" class="btn btn-success w-100">Ekle</button>
+                                        <button type="submit" class="btn btn-success w-100">@((editTaskItem.Id == 0) ? "Ekle" : "Güncelle")</button>
                                     </div>
                                 </EditForm>
                             </div>
@@ -117,3 +122,45 @@
         </table>
     }
 </div>
+
+@if (showDeleteProjectConfirm)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Projeyi Sil</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Bu projeyi silmek istediğinize emin misiniz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" @onclick="DeleteProjectConfirmed">Evet</button>
+                    <button class="btn btn-secondary" @onclick="CancelDeleteProject">Hayır</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (showDeleteTaskConfirm)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Görevi Sil</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Bu görevi silmek istediğinize emin misiniz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" @onclick="DeleteTaskConfirmed">Evet</button>
+                    <button class="btn btn-secondary" @onclick="CancelDeleteTask">Hayır</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
